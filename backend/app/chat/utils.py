@@ -6,11 +6,13 @@ from app.schema import (
 
 
 def build_title_for_document(document: DocumentSchema) -> str:
-    if DocumentMetadataKeysEnum.SEC_DOCUMENT not in document.metadata_map:
+    metadata_map = document.metadata_map or {}
+
+    if DocumentMetadataKeysEnum.SEC_DOCUMENT not in metadata_map:
         return "No Title Document"
 
     sec_metadata = SecDocumentMetadata.model_validate(
-        document.metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
+        metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
     )
     time_period = (
         f"{sec_metadata.year} Q{sec_metadata.quarter}"
