@@ -9,7 +9,7 @@ def build_title_for_document(document: DocumentSchema) -> str:
     if DocumentMetadataKeysEnum.SEC_DOCUMENT not in document.metadata_map:
         return "No Title Document"
 
-    sec_metadata = SecDocumentMetadata.parse_obj(
+    sec_metadata = SecDocumentMetadata.model_validate(
         document.metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
     )
     time_period = (

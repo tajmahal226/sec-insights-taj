@@ -63,14 +63,15 @@ class Settings(PreviewPrefixedSettings):
     SENTRY_DSN: Optional[str] = None
     RENDER_GIT_COMMIT: Optional[str] = None
     LOADER_IO_VERIFICATION_STR: str = "loaderio-e51043c635e0f4656473d3570ae5d9ec"
-    SEC_EDGAR_COMPANY_NAME: str = "YourOrgName"
-    SEC_EDGAR_EMAIL: EmailStr = "you@example.com"
+    SEC_EDGAR_COMPANY_NAME: str
+    SEC_EDGAR_EMAIL: EmailStr
     OPENAI_CHAT_LLM_NAME: str = "gpt-4o-mini"
 
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl | Literal["*"]] = []
+    CORS_ALLOW_ORIGIN_REGEX: Optional[str] = r"https://llama-app-frontend.*\.vercel\.app"
 
     @property
     def VERBOSE(self) -> bool:
@@ -114,6 +115,27 @@ class Settings(PreviewPrefixedSettings):
             raise ValueError("Invalid log level: " + str(v))
         return v
 
+    @field_validator("SEC_EDGAR_COMPANY_NAME", mode='after')
+    def validate_sec_edgar_company_name(cls, v: str) -> str:
+        """Validates SEC EDGAR company name is not a placeholder."""
+        if not v or v.strip() in ["YourOrgName", "your-company-name", ""]:
+            raise ValueError(
+                "SEC_EDGAR_COMPANY_NAME must be set to your actual organization name. "
+                "See https://www.sec.gov/os/webmaster-faq#code-support"
+            )
+        return v.strip()
+
+    @field_validator("SEC_EDGAR_EMAIL", mode='after')
+    def validate_sec_edgar_email(cls, v: EmailStr) -> EmailStr:
+        """Validates SEC EDGAR email is not a placeholder."""
+        placeholder_emails = ["you@example.com", "your@email.com", "example@example.com"]
+        if str(v).lower() in placeholder_emails:
+            raise ValueError(
+                "SEC_EDGAR_EMAIL must be set to your actual email address. "
+                "See https://www.sec.gov/os/webmaster-faq#code-support"
+            )
+        return v
+
     @field_validator("IS_PULL_REQUEST", mode='before')
     def assemble_is_pull_request(cls, v: str) -> bool:
         """Preprocesses the IS_PULL_REQUEST flag.
@@ -155,4 +177,4 @@ class Settings(PreviewPrefixedSettings):
 
 
 settings = Settings()
-os.environ["OPENAI_API_KEY"] = settings.OPENAI_API_KEY
+# Note: OPENAI_API_KEY is passed explicitly to OpenAI clients, no need to set environment variable

@@ -89,7 +89,7 @@ def get_tool_metadata_for_document(doc: DocumentSchema) -> ToolMetadata:
 
 
 def get_polygon_io_sec_tool(document: DocumentSchema) -> FunctionTool:
-    sec_metadata = SecDocumentMetadata.parse_obj(
+    sec_metadata = SecDocumentMetadata.model_validate(
         document.metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
     )
     tool_metadata = get_tool_metadata_for_document(document)
@@ -123,7 +123,7 @@ def get_polygon_io_sec_tool(document: DocumentSchema) -> FunctionTool:
                 )
                 descriptions.append(description)
             return descriptions
-        except:
+        except Exception:
             logger.error(
                 "Error retrieving data from polygon.io for document_id %s",
                 str(document.id),
