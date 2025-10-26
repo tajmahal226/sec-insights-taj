@@ -6,7 +6,7 @@
     "build:frontend": "npm --prefix frontend run build",
     "lint:frontend": "npm --prefix frontend run lint"
   },
-  "devDependencies": {
+  "dependencies": {
     "next": "^13.4.2"
   }
 }
