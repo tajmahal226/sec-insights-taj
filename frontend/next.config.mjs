@@ -19,6 +19,33 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    if (!backendUrl) {
+      return [];
+    }
+
+    const normalizedBackendUrl = backendUrl.endsWith("/")
+      ? backendUrl.slice(0, -1)
+      : backendUrl;
+
+    const isLocalBackend = /https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(?::\d+)?$/i.test(
+      normalizedBackendUrl,
+    );
+
+    if (isLocalBackend) {
+      return [];
+    }
+
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${normalizedBackendUrl}/api/:path*`,
+      },
+    ];
+  },
 };
 export default withSentryConfig(config, {
 // For all available options, see:
