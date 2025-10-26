@@ -1,0 +1,12 @@
+{
+  "name": "sec-insights-taj",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "lint:frontend": "npm --prefix frontend run lint"
+  },
+  "devDependencies": {
+    "next": "^13.4.2"
+  }
+}
