@@ -70,7 +70,7 @@ The backend is already configured to deploy to Render using the `render.yaml` fi
 
    | Variable | Value | Description |
    |----------|-------|-------------|
-   | `NEXT_PUBLIC_BACKEND_URL` | `https://your-app.onrender.com` | Your Render backend URL |
+   | `NEXT_PUBLIC_BACKEND_URL` | `https://your-app.onrender.com` | Your Render backend URL. Used to proxy `/api/*` calls through Next.js so browser requests stay same-origin for SSE streams. |
    | `NODE_ENV` | `production` | Node environment |
 
    Optional (for Sentry):
