@@ -87,9 +87,11 @@ def fetch_and_read_document(
 
 
 def build_description_for_document(document: DocumentSchema) -> str:
-    if DocumentMetadataKeysEnum.SEC_DOCUMENT in document.metadata_map:
+    metadata_map = document.metadata_map or {}
+
+    if DocumentMetadataKeysEnum.SEC_DOCUMENT in metadata_map:
         sec_metadata = SecDocumentMetadata.model_validate(
-            document.metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
+            metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
         )
         time_period = (
             f"{sec_metadata.year} Q{sec_metadata.quarter}"
@@ -237,7 +239,8 @@ async def get_chat_engine(
     api_query_engine_tools = [
         get_api_query_engine_tool(doc, callback_manager)
         for doc in conversation.documents
-        if DocumentMetadataKeysEnum.SEC_DOCUMENT in doc.metadata_map
+        if doc.metadata_map
+        and DocumentMetadataKeysEnum.SEC_DOCUMENT in doc.metadata_map
     ]
 
     quantitative_question_engine = SubQuestionQueryEngine.from_defaults(
