@@ -16,7 +16,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BACKEND_URL: z.string().min(1),
+    NEXT_PUBLIC_BACKEND_URL: z.string().default("http://localhost:8000"),
     NEXT_PUBLIC_CODESPACES: z.string().default("false").optional(),
     NEXT_PUBLIC_CODESPACE_NAME: z.string().optional(),
   },
