@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import s3fs
 from fsspec.asyn import AsyncFileSystem
 from llama_index.core import (
@@ -88,7 +88,7 @@ def fetch_and_read_document(
 
 def build_description_for_document(document: DocumentSchema) -> str:
     if DocumentMetadataKeysEnum.SEC_DOCUMENT in document.metadata_map:
-        sec_metadata = SecDocumentMetadata.parse_obj(
+        sec_metadata = SecDocumentMetadata.model_validate(
             document.metadata_map[DocumentMetadataKeysEnum.SEC_DOCUMENT]
         )
         time_period = (
@@ -287,7 +287,7 @@ Any questions about company-related financials or other metrics should be asked 
     else:
         doc_titles = "No documents selected."
 
-    curr_date = datetime.utcnow().strftime("%Y-%m-%d")
+    curr_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     chat_engine = OpenAIAgent.from_tools(
         tools=top_level_sub_tools,
         llm=chat_llm,

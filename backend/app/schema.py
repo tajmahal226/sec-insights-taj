@@ -116,7 +116,7 @@ class Message(Base):
 
 
 class UserMessageCreate(BaseModel):
-    content: str
+    content: str = Field(..., min_length=1, max_length=10000, description="User message content")
 
 
 class DocumentMetadataKeysEnum(str, Enum):

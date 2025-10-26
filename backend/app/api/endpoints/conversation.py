@@ -1,7 +1,7 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, status, Query
 import anyio
 from uuid import uuid4
-import datetime
+from datetime import datetime, timezone
 import asyncio
 import logging
 from collections import OrderedDict
@@ -70,7 +70,7 @@ async def delete_conversation(
 @router.get("/{conversation_id}/message")
 async def message_conversation(
     conversation_id: UUID,
-    user_message: str,
+    user_message: str = Query(..., min_length=1, max_length=10000),
     db: AsyncSession = Depends(get_db),
 ) -> EventSourceResponse:
     """
@@ -85,8 +85,8 @@ async def message_conversation(
         raise HTTPException(status_code=404, detail="Conversation not found")
 
     user_message = Message(
-        created_at=datetime.datetime.utcnow(),
-        updated_at=datetime.datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
         conversation_id=conversation_id,
         content=user_message,
         role=MessageRoleEnum.user,
@@ -126,7 +126,7 @@ async def message_conversation(
                                 message_obj.event_id
                             ].created_at
                         else:
-                            created_at = datetime.datetime.utcnow()
+                            created_at = datetime.now(timezone.utc)
                         sub_process = MessageSubProcess(
                             # NOTE: By setting the created_at to the current time, we are
                             # no longer able to use the created_at field to determine the
@@ -145,14 +145,14 @@ async def message_conversation(
                             f"Unknown message object type: {type(message_obj)}"
                         )
                         continue
-                    yield schema.Message.from_orm(message).json()
+                    yield schema.Message.model_validate(message, from_attributes=True).model_dump_json()
                 await task
                 if task.exception():
                     raise ValueError(
                         "handle_chat_message task failed"
                     ) from task.exception()
                 final_status = MessageStatusEnum.SUCCESS
-            except:
+            except Exception:
                 logger.error("Error in message publisher", exc_info=True)
                 final_status = MessageStatusEnum.ERROR
             message.status = final_status
@@ -160,7 +160,7 @@ async def message_conversation(
             db.add(message)
             await db.commit()
             final_message = await crud.fetch_message_with_sub_processes(db, message_id)
-            yield final_message.json()
+            yield final_message.model_dump_json()
 
     return EventSourceResponse(event_publisher())
 
@@ -168,7 +168,7 @@ async def message_conversation(
 @router.get("/{conversation_id}/test_message")
 async def test_message_conversation(
     conversation_id: UUID,
-    user_message: str,
+    user_message: str = Query(..., min_length=1, max_length=10000),
     db: AsyncSession = Depends(get_db),
 ) -> schema.Message:
     """
@@ -181,6 +181,6 @@ async def test_message_conversation(
     async for message in response.body_iterator:
         final_message = message
     if final_message is not None:
-        return schema.Message.parse_raw(final_message)
+        return schema.Message.model_validate_json(final_message)
     else:
         raise HTTPException(status_code=500, detail="Internal server error")
