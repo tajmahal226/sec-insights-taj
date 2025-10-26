@@ -35,6 +35,9 @@
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },
+  "overrides": {
+    "dommatrix": "file:libs/dommatrix"
+  },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@types/eslint": "^8.37.0",

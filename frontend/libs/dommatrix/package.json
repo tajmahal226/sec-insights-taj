@@ -1,0 +1,13 @@
+{
+  "name": "dommatrix",
+  "version": "1.0.3-patched",
+  "description": "Local copy of dommatrix polyfill to avoid deprecated npm package warning.",
+  "license": "MIT",
+  "main": "pkg/dommatrix.js",
+  "module": "pkg/dommatrix.esm.js",
+  "types": "types/more/dommatrix.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thednp/dommatrix"
+  }
+}
