@@ -68,6 +68,7 @@ node_modules/
 out/
 dist/
 .cache/
+next-env.d.ts
 
 # Build artifacts
 *.pyc
