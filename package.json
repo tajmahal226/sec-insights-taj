@@ -5,8 +5,5 @@
     "dev:frontend": "npm --prefix frontend run dev",
     "build:frontend": "npm --prefix frontend run build",
     "lint:frontend": "npm --prefix frontend run lint"
-  },
-  "dependencies": {
-    "next": "^13.4.2"
   }
 }
