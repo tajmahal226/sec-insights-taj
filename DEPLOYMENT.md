@@ -58,11 +58,13 @@ The backend is already configured to deploy to Render using the `render.yaml` fi
    - Import your GitHub repository
 
 2. **Configure Project Settings**
-   - **Root Directory**: `frontend`
-   - **Framework Preset**: Next.js (should auto-detect)
-   - **Build Command**: `npm run build` (default)
-   - **Output Directory**: `.next` (default)
-   - **Install Command**: `npm install` (default)
+   - The repository includes a [`vercel.json`](./vercel.json) file that tells Vercel to run all build steps from the `frontend/` workspace. When importing the project, Vercel should pick these settings up automatically.
+   - If you prefer to configure things manually:
+     - **Root Directory**: `frontend`
+     - **Framework Preset**: Next.js (should auto-detect)
+     - **Build Command**: `npm run build`
+     - **Output Directory**: `.next`
+     - **Install Command**: `npm install`
 
 3. **Configure Environment Variables**
 
