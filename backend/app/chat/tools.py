@@ -95,6 +95,7 @@ def get_polygon_io_sec_tool(document: DocumentSchema) -> FunctionTool:
     tool_metadata = get_tool_metadata_for_document(document)
 
     async def extract_data_from_sec_document(*args, **kwargs) -> List[str]:
+        client: AsyncReferenceClient | None = None
         try:
             client = ReferenceClient(
                 api_key=settings.POLYGON_IO_API_KEY,
@@ -130,6 +131,9 @@ def get_polygon_io_sec_tool(document: DocumentSchema) -> FunctionTool:
                 exc_info=True,
             )
             return ["No answer found."]
+        finally:
+            if client is not None:
+                await client.close()
 
     def sync_func_placeholder(*args, **kwargs) -> None:
         raise NotImplementedError(
