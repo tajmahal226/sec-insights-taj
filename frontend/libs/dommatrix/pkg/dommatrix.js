@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*!
 * DOMMatrix v1.0.3 (https://thednp.github.io/dommatrix/)
 * Copyright 2022 © thednp
