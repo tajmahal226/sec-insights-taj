@@ -45,7 +45,6 @@ class CustomPGVectorStore(PGVectorStore):
             async with session.begin():
                 statement = sqlalchemy.text("CREATE EXTENSION IF NOT EXISTS vector")
                 await session.execute(statement)
-                await session.commit()
 
         async with self._async_session() as session:
             async with session.begin():

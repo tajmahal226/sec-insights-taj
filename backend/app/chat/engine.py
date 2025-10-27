@@ -75,7 +75,11 @@ def fetch_and_read_document(
     with TemporaryDirectory() as temp_dir:
         temp_file_path = Path(temp_dir) / f"{str(document.id)}.pdf"
         with open(temp_file_path, "wb") as temp_file:
-            with requests.get(document.url, stream=True) as r:
+            with requests.get(
+                document.url,
+                stream=True,
+                timeout=(10, 30),
+            ) as r:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=8192):
                     temp_file.write(chunk)
