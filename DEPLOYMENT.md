@@ -50,6 +50,8 @@ The backend is already configured to deploy to Render using the `render.yaml` fi
 
 ## Frontend Deployment (Vercel)
 
+The repository includes a `vercel.json` configuration file that automatically sets the root directory to `frontend` and configures the build settings. This ensures Vercel can properly detect the Next.js application.
+
 ### Option 1: Deploy via Vercel Dashboard (Recommended)
 
 1. **Import Your Repository**
@@ -58,11 +60,13 @@ The backend is already configured to deploy to Render using the `render.yaml` fi
    - Import your GitHub repository
 
 2. **Configure Project Settings**
-   - **Root Directory**: `frontend`
+
+   The following settings are automatically configured via `vercel.json`, but you can verify them in the Vercel dashboard:
+   - **Root Directory**: `frontend` (configured in vercel.json)
    - **Framework Preset**: Next.js (should auto-detect)
-   - **Build Command**: `npm run build` (default)
-   - **Output Directory**: `.next` (default)
-   - **Install Command**: `npm install` (default)
+   - **Build Command**: `npm run build` (configured in vercel.json)
+   - **Output Directory**: `.next` (configured in vercel.json)
+   - **Install Command**: `npm install` (configured in vercel.json)
 
 3. **Configure Environment Variables**
 
