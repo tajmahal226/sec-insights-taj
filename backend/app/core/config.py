@@ -35,10 +35,10 @@ class PreviewPrefixedSettings(BaseSettings):
     deployments, so they are not prefixed.
     """
 
-    OPENAI_API_KEY: str
-    AWS_KEY: str
-    AWS_SECRET: str
-    POLYGON_IO_API_KEY: str
+    OPENAI_API_KEY: str = "test-openai-api-key"
+    AWS_KEY: str = "test-aws-key"
+    AWS_SECRET: str = "test-aws-secret"
+    POLYGON_IO_API_KEY: str = "test-polygon-io-api-key"
 
     model_config = model_config
 
@@ -50,21 +50,21 @@ class Settings(PreviewPrefixedSettings):
 
     PROJECT_NAME: str = "llama_app"
     API_PREFIX: str = "/api"
-    DATABASE_URL: str
+    DATABASE_URL: str = "postgresql://user:password@localhost:5432/app"
     LOG_LEVEL: str = "DEBUG"
     IS_PULL_REQUEST: bool = False
     RENDER: bool = False
     CODESPACES: bool = False
     CODESPACE_NAME: Optional[str] = None
-    S3_BUCKET_NAME: str
-    S3_ASSET_BUCKET_NAME: str
-    CDN_BASE_URL: str
+    S3_BUCKET_NAME: str = "local-chat-storage"
+    S3_ASSET_BUCKET_NAME: str = "local-chat-assets"
+    CDN_BASE_URL: str = "http://localhost"
     VECTOR_STORE_TABLE_NAME: str = "pg_vector_store"
     SENTRY_DSN: Optional[str] = None
     RENDER_GIT_COMMIT: Optional[str] = None
     LOADER_IO_VERIFICATION_STR: str = "loaderio-e51043c635e0f4656473d3570ae5d9ec"
-    SEC_EDGAR_COMPANY_NAME: str
-    SEC_EDGAR_EMAIL: EmailStr
+    SEC_EDGAR_COMPANY_NAME: str = "Example Industries"
+    SEC_EDGAR_EMAIL: EmailStr = "sec-team@example.org"  # type: ignore[assignment]
     OPENAI_CHAT_LLM_NAME: str = "gpt-4o-mini"
 
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
